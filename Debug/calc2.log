@@ -1,0 +1,8 @@
+﻿  源.cpp
+C:\Users\liugaosai\Desktop\123\calculate_V1.0.0\源.cpp(161,25): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+C:\Users\liugaosai\Desktop\123\calculate_V1.0.0\源.cpp(166,26): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+C:\Users\liugaosai\Desktop\123\calculate_V1.0.0\源.cpp(171,26): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+C:\Users\liugaosai\Desktop\123\calculate_V1.0.0\源.cpp(178,25): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+C:\Users\liugaosai\Desktop\123\calculate_V1.0.0\源.cpp(113,38): warning C4101: “t”: 未引用的局部变量
+C:\Users\liugaosai\Desktop\123\calculate_V1.0.0\源.cpp(281,6): warning C4101: “i”: 未引用的局部变量
+  calc2.vcxproj -> C:\Users\liugaosai\Desktop\123\calculate_V1.0.0\Debug\calc2.exe

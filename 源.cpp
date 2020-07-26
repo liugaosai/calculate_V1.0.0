@@ -244,7 +244,6 @@ float Calc_Result()                                               //将后缀表达式
 {
 	int i = 0;
 	float L_Val = 0, R_Val = 0;                                   //设置左值右值用于暂存pop出来的两个数字
-	printf("数组中总元素数:%d\n", element_index);
 	for (; element_index > 0; element_index--)
 	{
 		if (element_arr[i] == '+' || element_arr[i] == '-' || element_arr[i] == '*' || element_arr[i] == '/')
