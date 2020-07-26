@@ -2,6 +2,7 @@
 #include "stdlib.h"
 #include "math.h"
 #define MAX_SIZE 1000
+#define PI 3.14159265
 char element_arr[MAX_SIZE*2];
 char oper_lib[MAX_SIZE - 1];
 char num_stack[MAX_SIZE];
@@ -102,16 +103,68 @@ int Infix_To_Suffix(char str[MAX_SIZE * 2])                        //½«ÖĞ×º±í´ïÊ
 {
 	int i = 0, temp_i = 0, tmp_num = 0, t,kuohao_flag=0,num_flag=0,tmp_ele_index;
 	char temp[10] = " ", tmp_oper = 0;
+	int special_function_flag = 0;                                //ÓÃÀ´±êÖ¾µ±Ç°ÊÇ·ñÔÚ¼ÆËãÌØÊâÊäÈëµÄº¯Êı£¬0ÎŞ£¬1ÓĞ
+	int sin_flag = 0, cos_flag = 0, tan_flag = 0;                 //±êÖ¾µ±Ç°ÊÇÄÄÒ»ÀàÈı½Çº¯Êı£¬¼ÓÈëÆäËüÌØÊâº¯Êı£¬Ö±½ÓÌí¼Ó¼´¿É
 	while (str[i] != '\0')
 	{
-		while (str[i] >= '0' && str[i] <= '9')                      //½«Êı¾İ×Ö·ûºÍ²Ù×÷·û·ÖÀë¿ª£¬ÌáÈ¡Á¬ĞøµÄÊı×Ö×Ö·ûÖØ×é
+		if (str[i] >= 'a' && str[i] <= 'z')                          //ÅĞ¶ÏÊÇÄÄÒ»ÖÖÈı½Çº¯Êı£¬»¹¿ÉÒÔ¼ÓÈëÈÎºÎÆäËüº¯Êı£¬±ÈÈç¿ª·½µÈ
+		{
+			special_function_flag = 1;                               //´ËÎªÌØÊâº¯Êı£¬½«±êÖ¾ÖÃ1
+			switch (str[i])
+			{
+			case 's':                                                //ÅĞ¶ÏÊÇ·ñÊÇsinº¯Êı
+				if (str[i + 1] == 'i' && str[i + 2] == 'n')
+				{
+					i = i + 3;                                       //Ë÷ÒıiµÄ´óĞ¡¸ù¾İº¯ÊıÃûËùÓÃµÄ×Ö·ûÊı¾ö¶¨
+					sin_flag = 1;
+				}
+				break;
+			case 'c':                                                //ÅĞ¶ÏÊÇ·ñÊÇcosº¯Êı
+				if (str[i + 1] == 'o' && str[i + 2] == 's')
+				{
+					i = i + 3;
+					cos_flag = 1;
+				}
+				break;
+			case 't':                                                //ÅĞ¶ÏÊÇ·ñÎªtanº¯Êı
+				if (str[i + 1] == 'a' && str[i + 2] == 'n')
+				{
+					i = i + 3;
+					tan_flag = 1;
+				}
+				break;
+			default:
+				printf("ÉĞÎ´¶¨Òå´Ëº¯Êı\n");
+				break;
+			}
+		}
+		while (str[i] >= '0' && str[i] <= '9')                     //½«Êı¾İ×Ö·ûºÍ²Ù×÷·û·ÖÀë¿ª£¬ÌáÈ¡Á¬ĞøµÄÊı×Ö×Ö·ûÖØ×é
 		{
 			temp[temp_i] = str[i];
 			temp_i++;
 			i++;
 			num_flag = 1;
 		}
-		if (num_flag == 1)
+		if (special_function_flag)                                  //Èç¹ûÊÇÌØÊâº¯Êı½øĞĞÌØÊâº¯ÊıÇó½â,²¢½«¼ÆËã½á¹ûÑ¹ÈëÔªËØÕ»
+		{
+			if (sin_flag)
+			{
+				Push_Element_Arr(sin(atoi(temp) * PI / 180));                  //¼ÆËãsinÖµ½«Æä½á¹ûÑ¹ÈëÔªËØÕ»
+				sin_flag = 0;
+			}
+			else if (cos_flag)
+			{
+				Push_Element_Arr((cos(atoi(temp) * PI / 180)));
+				cos_flag = 0;
+			}
+			else if (tan_flag)
+			{
+				Push_Element_Arr((tan(atoi(temp) * PI / 180)));
+				tan_flag = 0;
+			}
+			special_function_flag = 0;
+		}
+		else if (num_flag == 1)
 		{
 			Push_Element_Arr(atoi(temp));                          //½«Êı×Ö×Ö·û´®×ª»¯ÎªÊı×Ö
 			num_flag = 0;
