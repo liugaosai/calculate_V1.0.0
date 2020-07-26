@@ -3,11 +3,11 @@
 #include "math.h"
 #define MAX_SIZE 1000
 #define PI 3.14159265
-char element_arr[MAX_SIZE*2];
+float element_arr[MAX_SIZE*2];                             //¶¨Òå´æÈëÔªËØÊý×éÎª¸¡µãÐÍ
 char oper_lib[MAX_SIZE - 1];
-char num_stack[MAX_SIZE];
+float num_stack[MAX_SIZE];
 int element_index = 0, oper_index = 0, num_stack_index=0;
-int Push_Element_Arr(char ele)                             //¶¨ÒåÔªËØÊý×é
+int Push_Element_Arr(float ele)                             //¶¨ÒåÔªËØÊý×é
 {
 	element_arr[element_index] = ele;
 	element_index++;
@@ -27,15 +27,15 @@ char Pop_Oper()                                          //²Ù×÷·û³öÕ»º¯Êý
 	oper_lib[oper_index] = '\0';
 	return tmp;
 }
-int Push_Num_Stack(int Num)                                //Êý¾ÝÈëÕ»º¯Êý
+int Push_Num_Stack(float Num)                                //Êý¾ÝÈëÕ»º¯Êý
 {
 	num_stack[num_stack_index] = Num;
 	num_stack_index++;
 	return 0;
 }
-int Pop_Num_Stack()                                       //Êý¾Ý³öÕ»º¯Êý
+float Pop_Num_Stack()                                       //Êý¾Ý³öÕ»º¯Êý
 {
-	char tmp;
+	float tmp;
 	num_stack_index--;
 	tmp = num_stack[num_stack_index];
 	num_stack[num_stack_index] = 0;
@@ -50,6 +50,15 @@ int Detection_Input_Val(char str[MAX_SIZE * 2]) //·µ»Ø1±íÊ¾ÓÐÎÞÐ§Êý¾Ý£¬0ÎªÓÐÐ§
 		if (str[i] >= '0' && str[i] <= '9')                       
 		{
 			;
+		}
+		else if (str[i] == '.')
+		{
+			if ((str[i + 1] >= '0' && str[i + 1] <= '9') && (str[i - 1] >= '0' && str[i - 1] <= '9'))    //¼ì²âÐ¡ÊýµãÇ°ºóÊÇ·ñÓÐÊý×Ö£¬ÎÞµÄ»°±¨´íÍË³ö
+			{
+
+			}
+			else 
+				return 1;
 		}
 		else if (str[i] == '+' || str[i] == '-' || str[i] == '*' || str[i] == '\\')
 		{
@@ -138,7 +147,7 @@ int Infix_To_Suffix(char str[MAX_SIZE * 2])                        //½«ÖÐ×º±í´ïÊ
 				break;
 			}
 		}
-		while (str[i] >= '0' && str[i] <= '9')                     //½«Êý¾Ý×Ö·ûºÍ²Ù×÷·û·ÖÀë¿ª£¬ÌáÈ¡Á¬ÐøµÄÊý×Ö×Ö·ûÖØ×é
+		while ((str[i] >= '0' && str[i] <= '9')||str[i]=='.')                     //½«Êý¾Ý×Ö·ûºÍ²Ù×÷·û·ÖÀë¿ª£¬ÌáÈ¡Á¬ÐøµÄÊý×Ö×Ö·ûÖØ×é
 		{
 			temp[temp_i] = str[i];
 			temp_i++;
@@ -149,24 +158,24 @@ int Infix_To_Suffix(char str[MAX_SIZE * 2])                        //½«ÖÐ×º±í´ïÊ
 		{
 			if (sin_flag)
 			{
-				Push_Element_Arr(sin(atoi(temp) * PI / 180));                  //¼ÆËãsinÖµ½«Æä½á¹ûÑ¹ÈëÔªËØÕ»
+				Push_Element_Arr(sin(atof(temp) * PI / 180));                  //¼ÆËãsinÖµ½«Æä½á¹ûÑ¹ÈëÔªËØÕ»
 				sin_flag = 0;
 			}
 			else if (cos_flag)
 			{
-				Push_Element_Arr((cos(atoi(temp) * PI / 180)));
+				Push_Element_Arr((cos(atof(temp) * PI / 180)));
 				cos_flag = 0;
 			}
 			else if (tan_flag)
 			{
-				Push_Element_Arr((tan(atoi(temp) * PI / 180)));
+				Push_Element_Arr((tan(atof(temp) * PI / 180)));
 				tan_flag = 0;
 			}
 			special_function_flag = 0;
 		}
 		else if (num_flag == 1)
 		{
-			Push_Element_Arr(atoi(temp));                          //½«Êý×Ö×Ö·û´®×ª»¯ÎªÊý×Ö
+			Push_Element_Arr(atof(temp));                          //½«Êý×Ö×Ö·û´®×ª»¯ÎªÊý×Ö
 			num_flag = 0;
 		}
 
@@ -205,7 +214,7 @@ int Infix_To_Suffix(char str[MAX_SIZE * 2])                        //½«ÖÐ×º±í´ïÊ
 				}
 				else
 				{
-					while (!youxianji(str[i], oper_lib[oper_index - 1]) && oper_lib[0] != '\0')
+					while (!youxianji(str[i], oper_lib[oper_index - 1]) && oper_lib[0] != '\0')           //À¨ºÅÖÐÊ£Óà²Ù×÷·ûÈ«²¿³öÕ»
 						Push_Element_Arr(Pop_Oper());
 					Push_Oper(str[i]);
 				}
@@ -222,18 +231,19 @@ int Infix_To_Suffix(char str[MAX_SIZE * 2])                        //½«ÖÐ×º±í´ïÊ
 	for (tmp_ele_index=0; tmp_ele_index < element_index; tmp_ele_index++)
 	{
 		if(element_arr[tmp_ele_index]=='+'|| element_arr[tmp_ele_index] == '-'|| element_arr[tmp_ele_index] == '*'|| element_arr[tmp_ele_index] == '/')
-			printf("%c", element_arr[tmp_ele_index]);
+			printf("%c", (char)element_arr[tmp_ele_index]);
 		else
-			printf("%d", element_arr[tmp_ele_index]);
+			printf("%.3f", element_arr[tmp_ele_index]);
 	}
 	printf("\n*****************end*********************\n");
 	
 
 	return 0;
 }
-int Calc_Result()                                               //½«ºó×º±í´ïÊ½½øÐÐ¼ÆËã£¬²¢·µ»Ø¼ÆËã½á¹û
+float Calc_Result()                                               //½«ºó×º±í´ïÊ½½øÐÐ¼ÆËã£¬²¢·µ»Ø¼ÆËã½á¹û
 {
-	int i=0,L_Val=0, R_Val = 0;
+	int i = 0;
+	float L_Val = 0, R_Val = 0;                                   //ÉèÖÃ×óÖµÓÒÖµÓÃÓÚÔÝ´æpop³öÀ´µÄÁ½¸öÊý×Ö
 	printf("Êý×éÖÐ×ÜÔªËØÊý:%d\n", element_index);
 	for (; element_index > 0; element_index--)
 	{
@@ -241,7 +251,7 @@ int Calc_Result()                                               //½«ºó×º±í´ïÊ½½ø
 		{
 			R_Val = Pop_Num_Stack();
 			L_Val = Pop_Num_Stack();
-			switch (element_arr[i])
+			switch ((char)element_arr[i])
 			{
 			case '+':
 				Push_Num_Stack(L_Val + R_Val);
@@ -282,6 +292,6 @@ int main()
 	printf("%s\n", str);
 	printf("*****************end*********************\n");
 	Infix_To_Suffix(str);
-	printf("½á¹ûÊÇ£º%d", Calc_Result());
+	printf("¼ÆËã½á¹ûÊÇ£º%.3f", Calc_Result());
 	return 0;
 }
