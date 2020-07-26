@@ -38,7 +38,7 @@ int youxianji(char a, char b)
 }
 int Separate_Num_Storage(char str[MAX_SIZE * 2])
 {
-	int i = 0, temp_i = 0, tmp_num = 0, t;
+	int i = 0, temp_i = 0, tmp_num = 0, t,kuohao_flag=0,num_flag=0;
 	char temp[10] = " ", tmp_oper = 0;
 	while (str[i] != '\0')
 	{
@@ -47,9 +47,13 @@ int Separate_Num_Storage(char str[MAX_SIZE * 2])
 			temp[temp_i] = str[i];
 			temp_i++;
 			i++;
+			num_flag = 1;
 		}
-		Push_Element_Arr(atoi(temp));
-		
+		if (num_flag == 1)
+		{
+			Push_Element_Arr(atoi(temp));
+			num_flag = 0;
+		}
 
 		for (; temp_i > 0; temp_i--)
 			temp[temp_i] = 0;
@@ -57,32 +61,40 @@ int Separate_Num_Storage(char str[MAX_SIZE * 2])
 
 		if (str[i] != '\0')
 		{
-			if(oper_lib[0]=='\0')
+			if(oper_lib[0]=='\0'&& str[i] != '(')
 				Push_Oper(str[i]);
 			else
 			{
-				/*if (oper_lib[oper_index - 1] == '+' || oper_lib[oper_index - 1] == '-')
+				if (str[i] == '(')
 				{
-					if (str[i] == '+' || str[i] == '-')
-					{
+					Push_Oper(str[i]);
+					kuohao_flag++;
+				}
+				else if (str[i] == ')')
+				{
+					while (oper_lib[oper_index-1] != '(')
 						Push_Element_Arr(Pop_Oper());
+					Pop_Oper();
+					kuohao_flag--;
+				}
+				else if (kuohao_flag != 0)
+				{
+					if (oper_lib[oper_index - 1] == '(')
 						Push_Oper(str[i]);
-					}
-					else
+					else 
 					{
+						while (!youxianji(str[i], oper_lib[oper_index - 1]) && oper_lib[oper_index - 1] != '(')
+							Push_Element_Arr(Pop_Oper());
 						Push_Oper(str[i]);
 					}
 				}
 				else
 				{
-					Push_Element_Arr(Pop_Oper());
-					if(oper_lib[oper_index - 1] == '+' || oper_lib[oper_index - 1] == '-')
+					while (!youxianji(str[i], oper_lib[oper_index - 1]) && oper_lib[0] != '\0')
 						Push_Element_Arr(Pop_Oper());
 					Push_Oper(str[i]);
-				}*/
-				while (!youxianji(str[i], oper_lib[oper_index - 1])&&oper_lib[0]!='\0')
-					Push_Element_Arr(Pop_Oper());
-				Push_Oper(str[i]);
+				}
+				
 			}
 			i++;
 		}
@@ -99,6 +111,7 @@ int Separate_Num_Storage(char str[MAX_SIZE * 2])
 		else
 			printf("%d", element_arr[element_index]);
 	}
+	printf("\n");
 	
 
 	return 0;
