@@ -1,5 +1,6 @@
 #include "stdio.h"
 #include "stdlib.h"
+#include "math.h"
 #define MAX_SIZE 1000
 char element_arr[MAX_SIZE*2];
 char oper_lib[MAX_SIZE - 1];
@@ -39,7 +40,52 @@ char Pop_Oper()
 	oper_lib[oper_index] = '\0';
 	return tmp;
 }
-int youxianji(char a, char b)
+int Detection_Input_Val(char str[MAX_SIZE * 2]) //返回1表示有无效数据，0为有效
+{
+	int i;
+	for (i = 0; str[i] != '\0'; i++)
+	{
+		if (str[i] >= '0' && str[i] <= '9')                       
+		{
+			;
+		}
+		else if (str[i] == '+' || str[i] == '-' || str[i] == '*' || str[i] == '\\')
+		{
+			if (str[i + 1] == '+' || str[i + 1] == '-' || str[i + 1] == '*' || str[i + 1] == '\\' || str[i + 1] == '\0'||i==0) //表达式开头为运算符或连续出现两个运算符则退出报错
+				return 1;
+		}
+		else if (str[i] >= 'a' && str[i] <= 'z')                      //在此处可以加入合法运算符
+		{
+			switch (str[i])
+			{
+			case 's':                                                //判断是否是sin函数
+				if (str[i + 1] == 'i' && str[i + 2] == 'n')
+					i = i + 2;
+				else
+					return 1;
+				break;
+			case 'c':                                                 //判断是否是cos函数
+				if (str[i + 1] == 'o' && str[i + 2] == 's')
+					i = i + 2;
+				else
+					return 1;
+				break;
+			case 't':                                                  //判断是否为tan函数
+				if (str[i + 1] == 'a' && str[i + 2] == 'n')
+					i = i + 2;
+				else
+					return 1;
+				break;
+			default:
+				break;
+			}
+		}
+		else
+			return 1;
+	}
+	return 0;
+}
+int youxianji(char a, char b)                                          //判断运算符优先级返回1表示a的优先级高返回0表示同级或低级
 {
 	if (a == '+' || a == '-')
 		return 0;
@@ -51,7 +97,7 @@ int youxianji(char a, char b)
 			return 0;
 	}
 }
-int Infix_To_Suffix(char str[MAX_SIZE * 2])
+int Infix_To_Suffix(char str[MAX_SIZE * 2])                        //将中缀表达式转化为后缀表达式
 {
 	int i = 0, temp_i = 0, tmp_num = 0, t,kuohao_flag=0,num_flag=0,tmp_ele_index;
 	char temp[10] = " ", tmp_oper = 0;
@@ -131,7 +177,7 @@ int Infix_To_Suffix(char str[MAX_SIZE * 2])
 
 	return 0;
 }
-int Calc_Result()
+int Calc_Result()                                               //将后缀表达式进行计算，并返回计算结果
 {
 	int i=0,L_Val=0, R_Val = 0;
 	printf("数组中总元素数:%d\n", element_index);
@@ -170,9 +216,14 @@ int Calc_Result()
 int main()
 {
 	int i;
-	char str[MAX_SIZE * 2];
+	char str[MAX_SIZE * 2];                                      //由于存储输入的数学表达式
 	printf("please input a mathematical expression:\n");
 	scanf_s("%s", str, sizeof(str));
+	if (Detection_Input_Val(str))                                //检测是否有非法字符输入
+	{
+		printf("存在非法输入程序终止................\n");
+		return 0;
+	}
 	printf("***************中缀输出******************\n");
 	printf("%s\n", str);
 	printf("*****************end*********************\n");
