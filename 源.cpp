@@ -6,33 +6,19 @@ char element_arr[MAX_SIZE*2];
 char oper_lib[MAX_SIZE - 1];
 char num_stack[MAX_SIZE];
 int element_index = 0, oper_index = 0, num_stack_index=0;
-int Push_Element_Arr(char ele)
+int Push_Element_Arr(char ele)                             //¶¨ÒåÔªËØÊý×é
 {
 	element_arr[element_index] = ele;
 	element_index++;
 	return 0;
 }
-int Push_Oper(char oper)
+int Push_Oper(char oper)                                   //²Ù×÷·ûÈëÕ»º¯Êý
 {
 	oper_lib[oper_index] = oper;
 	oper_index++;
 	return 0;
 }
-int Push_Num_Stack(int Num)
-{
-	num_stack[num_stack_index] = Num;
-	num_stack_index++;
-	return 0;
-}
-int Pop_Num_Stack()
-{
-	char tmp;
-	num_stack_index--;
-	tmp = num_stack[num_stack_index];
-	num_stack[num_stack_index] = 0;
-	return tmp;
-}
-char Pop_Oper()
+char Pop_Oper()                                          //²Ù×÷·û³öÕ»º¯Êý 
 {
 	char tmp;
 	oper_index--;
@@ -40,6 +26,21 @@ char Pop_Oper()
 	oper_lib[oper_index] = '\0';
 	return tmp;
 }
+int Push_Num_Stack(int Num)                                //Êý¾ÝÈëÕ»º¯Êý
+{
+	num_stack[num_stack_index] = Num;
+	num_stack_index++;
+	return 0;
+}
+int Pop_Num_Stack()                                       //Êý¾Ý³öÕ»º¯Êý
+{
+	char tmp;
+	num_stack_index--;
+	tmp = num_stack[num_stack_index];
+	num_stack[num_stack_index] = 0;
+	return tmp;
+}
+
 int Detection_Input_Val(char str[MAX_SIZE * 2]) //·µ»Ø1±íÊ¾ÓÐÎÞÐ§Êý¾Ý£¬0ÎªÓÐÐ§
 {
 	int i;
@@ -103,7 +104,7 @@ int Infix_To_Suffix(char str[MAX_SIZE * 2])                        //½«ÖÐ×º±í´ïÊ
 	char temp[10] = " ", tmp_oper = 0;
 	while (str[i] != '\0')
 	{
-		while (str[i] >= '0' && str[i] <= '9')
+		while (str[i] >= '0' && str[i] <= '9')                      //½«Êý¾Ý×Ö·ûºÍ²Ù×÷·û·ÖÀë¿ª£¬ÌáÈ¡Á¬ÐøµÄÊý×Ö×Ö·ûÖØ×é
 		{
 			temp[temp_i] = str[i];
 			temp_i++;
@@ -112,15 +113,15 @@ int Infix_To_Suffix(char str[MAX_SIZE * 2])                        //½«ÖÐ×º±í´ïÊ
 		}
 		if (num_flag == 1)
 		{
-			Push_Element_Arr(atoi(temp));
+			Push_Element_Arr(atoi(temp));                          //½«Êý×Ö×Ö·û´®×ª»¯ÎªÊý×Ö
 			num_flag = 0;
 		}
 
-		for (; temp_i > 0; temp_i--)
+		for (; temp_i > 0; temp_i--)                               //Çå¿ÕÁÙÊ±Êý×é
 			temp[temp_i] = 0;
 
 
-		if (str[i] != '\0')
+		if (str[i] != '\0')                                        //ÊµÏÖÖÐ×º±í´ïÊ½µ½ºó×º±í´ïÊ½
 		{
 			if(oper_lib[0]=='\0'&& str[i] != '(')
 				Push_Oper(str[i]);
@@ -161,7 +162,7 @@ int Infix_To_Suffix(char str[MAX_SIZE * 2])                        //½«ÖÐ×º±í´ïÊ
 		}
 
 	}
-	while (oper_lib[0] != '\0')
+	while (oper_lib[0] != '\0')                                  //²Ù×÷·ûÈ«²¿³öÕ»
 		Push_Element_Arr(Pop_Oper());
 
 	printf("***************ºó×ºÊä³ö******************\n");
